@@ -29,8 +29,7 @@ export default function AdminPage() {
       setErrorMessage(error);
     } else {
       const { access_token, refresh_token } = data.session;
-      localStorage.setItem("access_token", access_token);
-      localStorage.setItem("refresh_token", refresh_token);
+      supabase.auth.setSession({ access_token, refresh_token });
 
       router.push("/dashboard");
     }
