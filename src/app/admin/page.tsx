@@ -36,11 +36,12 @@ export default function AdminPage() {
   };
 
   return (
-    <main className="px-8">
-      <h1>Login Page</h1>
-      <div>
-        <form onSubmit={handleSubmit}>
+    <main className="px-8 flex justify-center items-start flex-1">
+      <div className="h-1/3 flex flex-col w-full border-2 border-black rounded-md p-4">
+        <h2 className="mb-2">Logga in till adminvy</h2>
+        <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
           <input
+            className="placeholder:font-light"
             placeholder="Email"
             type="email"
             name="email"
@@ -48,16 +49,23 @@ export default function AdminPage() {
             value={credentials.email}
           />
           <input
+            className="placeholder:font-light"
             placeholder="Lösenord"
             type="password"
             name="password"
             onChange={handleInput}
             value={credentials.password}
           />
-          <button type="submit">Login</button>
+          {errorMessage ? (
+            <h3 className="text-red-400 font-semibold">
+              {errorMessage.message}
+            </h3>
+          ) : null}
+          <button className="w-content p-2 h-content mt-8" type="submit">
+            Login
+          </button>
         </form>
       </div>
-      {errorMessage ? <h3 className="">{errorMessage.message}</h3> : null}
     </main>
   );
 }
