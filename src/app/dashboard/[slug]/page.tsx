@@ -46,7 +46,7 @@ export default function ApartmentAdminPage({
       }
     }
     checkSession();
-  }, [router]);
+  }, [router, params.slug]);
 
   const editApartment = async () => {
     if (apartmentData) {
@@ -90,7 +90,7 @@ export default function ApartmentAdminPage({
     <main className="px-8 flex flex-col gap-4">
       <Link href="/dashboard">Tillbaka</Link>
       <div>
-        <p>Hello you've made it here.</p>
+        <p>Hello you made it here.</p>
       </div>
       {apartmentData ? (
         <div className="w-full flex flex-col gap-4 p-4 rounded-lg border-2 border-amber-500">
