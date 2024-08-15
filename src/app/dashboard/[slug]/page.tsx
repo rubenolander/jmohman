@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { supabase } from "@/app/supabase";
 import type { Apartment } from "@/app/lib/types";
 
@@ -43,18 +44,25 @@ export default function ApartmentAdminPage({
   }, [router]);
 
   if (isLoading) {
-    return <div>Hämtar data ...</div>;
+    return (
+      <main className="px-8">
+        <Link href="/dashboard">Tillbaka</Link>
+        <div>Hämtar data ...</div>
+      </main>
+    );
   }
 
   console.log(apartmentData);
   return (
     <main className="px-8">
+      <Link href="/dashboard">Tillbaka</Link>
       Hello you've made it here.
       {apartmentData ? (
-        <div>
-          <p>{apartmentData.adressLine}</p>
-          <p>{apartmentData.buildingName}</p>
+        <div className="">
+          <p className="">{apartmentData.adress_line}</p>
+          <p>{apartmentData.building_name}</p>
           <p>{apartmentData.rent}</p>
+          <p>{apartmentData.size}</p>
         </div>
       ) : (
         ""

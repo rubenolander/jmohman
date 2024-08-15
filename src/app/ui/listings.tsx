@@ -10,17 +10,20 @@ export default function ApartmentListings({
   errorMessage: string | null;
   listingsProp: Apartment[] | [];
 }) {
-  const [isLoading, setLoading] = useState<boolean>(false);
-  const [listings, setListings] = useState<Apartment[]>(listingsProp);
-  const number: number = 1;
   return (
     <div className="w-full h-fit">
-      {isLoading ? "Hämtar data..." : ""}
       {errorMessage ? <p>{errorMessage}</p> : null}
+      <div className="w-fit py-2">
+        <Link
+          className=" box-decoration-slice font-bold text-md hover:text-lg hover:underline"
+          href={`/dashboard/add`}
+        >
+          <h3>Lägg till +</h3>
+        </Link>
+      </div>
       <div className="w-full">
-        <p>Lägenheter</p>
-        {listings
-          ? listings.map((listing) => (
+        {listingsProp
+          ? listingsProp.map((listing) => (
               <Link
                 key={listing.id}
                 className="block p-4 rounded-lg border-2 border-amber-500"
@@ -28,7 +31,8 @@ export default function ApartmentListings({
               >
                 <button className="">
                   <div className="p-2 rounded-lg">
-                    <p>{listing.adressLine}</p>
+                    <p>{listing.rent}</p>
+                    <p>{listing.adress_line}</p>
                   </div>
                 </button>
               </Link>

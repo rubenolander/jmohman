@@ -39,14 +39,13 @@ export default function Dashboard() {
           const typedApartments: Apartment[] = apartments.map(
             (apartment: any) => ({
               id: apartment.id,
-              buildingName: apartment.building_name,
-              adressLine: apartment.adress_line,
-              apartmentNumber: apartment.apartment_number,
+              building_name: apartment.building_name,
+              adress_line: apartment.adress_line,
+              apartment_number: apartment.apartment_number,
               rent: apartment.rent,
               size: apartment.size,
             })
           );
-          console.log(apartments);
           setListings(typedApartments);
           setErrorMessage(null);
         }
