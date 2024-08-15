@@ -21,7 +21,7 @@ export default function ApartmentListings({
           <h3>Lägg till +</h3>
         </Link>
       </div>
-      <div className="w-full">
+      <div className="w-full flex flex-col gap-4">
         {listingsProp
           ? listingsProp.map((listing) => (
               <Link

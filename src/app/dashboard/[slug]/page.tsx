@@ -17,6 +17,11 @@ export default function ApartmentAdminPage({
   const [isLoading, setLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [apartmentData, setApartmentData] = useState<Apartment>();
+  const [editField, setEditField] = useState<string | null>(null);
+
+  const toggleEdit = (field: string) => {
+    setEditField(editField === field ? null : field);
+  };
 
   useEffect(() => {
     async function checkSession() {
@@ -43,6 +48,34 @@ export default function ApartmentAdminPage({
     checkSession();
   }, [router]);
 
+  const editApartment = async () => {
+    if (apartmentData) {
+      const { data, error } = await supabase
+        .from(myFrom)
+        .update([
+          {
+            building_name: apartmentData.building_name,
+            adress_line: apartmentData.adress_line,
+            apartment_number: apartmentData.apartment_number,
+            rent: apartmentData.rent,
+            size: `${apartmentData.rent}m2`,
+          },
+        ])
+        .eq("id", params.slug)
+        .select();
+    }
+  };
+
+  const deleteApartment = async () => {
+    if (apartmentData) {
+      const { data, error } = await supabase
+        .from(myFrom)
+        .delete()
+        .eq("id", params.slug);
+      router.push("/dashboard");
+    }
+  };
+
   if (isLoading) {
     return (
       <main className="px-8">
@@ -54,15 +87,36 @@ export default function ApartmentAdminPage({
 
   console.log(apartmentData);
   return (
-    <main className="px-8">
+    <main className="px-8 flex flex-col gap-4">
       <Link href="/dashboard">Tillbaka</Link>
-      Hello you've made it here.
+      <div>
+        <p>Hello you've made it here.</p>
+      </div>
       {apartmentData ? (
-        <div className="">
-          <p className="">{apartmentData.adress_line}</p>
+        <div className="w-full flex flex-col gap-4 p-4 rounded-lg border-2 border-amber-500">
+          {editField === "adress" ? (
+            <input
+              type="text"
+              value={apartmentData.adress_line}
+              onChange={(e) =>
+                setApartmentData({
+                  ...apartmentData,
+                  adress_line: e.target.value,
+                })
+              }
+            />
+          ) : (
+            <>
+              <p className="">{apartmentData.adress_line}</p>
+              <button onClick={() => toggleEdit("adress")}>Edit</button>
+            </>
+          )}
+
           <p>{apartmentData.building_name}</p>
           <p>{apartmentData.rent}</p>
           <p>{apartmentData.size}</p>
+          <button onClick={editApartment}>SAVE</button>
+          <button onClick={deleteApartment}>DELETE</button>
         </div>
       ) : (
         ""
