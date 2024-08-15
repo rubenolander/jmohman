@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "../supabase";
 import { AuthError } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
@@ -14,8 +14,22 @@ export default function AdminPage() {
     password: "",
   });
   const [errorMessage, setErrorMessage] = useState<AuthError | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setLoading] = useState<boolean>(false);
   const router = useRouter();
+
+  useEffect(() => {
+    async function checkSession() {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session && session.access_token) {
+        router.push("/dashboard");
+      } else {
+        setLoading(false);
+      }
+    }
+    checkSession();
+  }, [router]);
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -24,18 +38,22 @@ export default function AdminPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrorMessage(null);
-    setIsLoading(true);
+    setLoading(true);
 
     const { data, error } = await supabase.auth.signInWithPassword(credentials);
     if (error) {
       setErrorMessage(error);
-      setIsLoading(false);
+      setLoading(false);
     } else {
       const { access_token, refresh_token } = data.session;
       supabase.auth.setSession({ access_token, refresh_token });
       router.push("/dashboard");
     }
   };
+
+  if (isLoading) {
+    return <main className="px-8">Hämtar...</main>;
+  }
 
   return (
     <main className="px-8 flex justify-center items-start">
